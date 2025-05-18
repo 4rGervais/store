@@ -4,6 +4,7 @@ import morgan from "morgan"
 import cors from "cors"
 import dotenv from "dotenv"
 import productRoutes from "./routes/productroutes.js"
+import { sql } from "./config/db.js"
 dotenv.config
 
 const app = express()
@@ -17,8 +18,28 @@ app.use(helmet()) // helmet is a security middleware that helps you to secure yo
 
 app.use(morgan()) // logs the request
 
+async function initDB(){
+    try{
+        await sql`
+            CREATE TABLE IF NOT EXISTS products  (
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                image VARCHAR(255) NOT NULL,
+                price DECIMAL(10, 2) NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `;
+        console.log('database initialized successfully');
+    } catch(error){
+        console.log(sql.query);
+        console.log('Error:: ' + error);
+    }
+}
+
 app.get("/",productRoutes)
 
-app.listen(PORT, () => {
-    console.log("Our server is running on port " + PORT);
+initDB().then(()=>{
+    app.listen(PORT, () => {
+        console.log("Our server is running on port " + PORT);
+    })
 })
