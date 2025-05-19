@@ -1,7 +1,11 @@
 
 
 export const getAllProducts = async(req, res) => {
-    res.send('halloo')
+    res.send('alll ')
+}
+
+export const getProduct = async(req, res) => {
+    res.send('ocyee')
 }
 
 export const createProduct = async(req, res) => {

@@ -5,7 +5,8 @@ import cors from "cors"
 import dotenv from "dotenv"
 import productRoutes from "./routes/productroutes.js"
 import { sql } from "./config/db.js"
-dotenv.config
+
+dotenv.config();
 
 const app = express()
 const PORT = process.env.PORT || 3000
