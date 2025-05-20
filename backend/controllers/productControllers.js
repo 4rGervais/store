@@ -10,7 +10,17 @@ export const getAllProducts = async(req, res) => {
     }
 }
 
-export const getProduct = async(req, res) => { }
+export const getProduct = async(req, res) => {
+    const id = req.params
+    const {name, price, image} = req.body()
+    try {
+        const product = await sql`Select * from products where id=${id}`
+        res.status(200).json({ success: true, data: product})
+    } catch (error) {
+        console.log("Internal server error");
+        res.status(500).json({success: false, message: "Internal server error"})
+    }
+}
 
 export const createProduct = async(req, res) => {
     const {name, image, price} = req.body()
@@ -32,9 +42,30 @@ export const createProduct = async(req, res) => {
 }
 
 export const updateProductData = async(req, res) => {
-    // 
+    const id = req.params
+    const {name, price, image} = req.body()
+    try {
+        const updatedProduct = await sql`update products set name = ${name}, price = ${price}, image = ${image} where id=${id} returning *`
+        if(updatedProduct.length === 0){
+            return res.status(404).json({success: true, message: "Product not found"})
+        }
+        res.status(200).json({ success: true, data: updatedProduct[0]})
+    } catch (error) {
+        console.log("Errr while updating a product. ", error.message);
+        res.status(500).json({success: false, message: "Internal server error"})
+    }
 }
 
 export const deleteProduct = async(req, res) => {
-    // 
+    const id = req.params
+    try {
+        const deletedProduct = await sql`Delete from products where id=${id} returning *`
+        if(deletedProduct.length === 0){
+            return res.status(404).json({success: true, message: "Product not found"})
+        }
+        res.status(200).json({ success: true, data: deletedProduct[0]})
+    } catch (error) {
+        console.log("Error in delete product function", error);
+        res.status(500).json({success: false, message: "Internal server error"})
+    }
 }

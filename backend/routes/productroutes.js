@@ -8,7 +8,7 @@ router.get('/' , getAllProducts)
 
 router.get('/:id' , getProduct)
 
-router.post('/' , () => creat)
+router.post('/' , () => createProduct)
 
 router.put('/:id' , updateProductData)
 
