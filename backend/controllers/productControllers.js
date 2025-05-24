@@ -11,9 +11,8 @@ export const getAllProducts = async(req, res) => {
 }
 
 export const getProduct = async(req, res) => {
-    const id = req.params
-    const {name, price, image} = req.body()
-    try {
+    const { id } = req.params
+            try {
         const product = await sql`Select * from products where id=${id}`
         res.status(200).json({ success: true, data: product})
     } catch (error) {
@@ -23,8 +22,7 @@ export const getProduct = async(req, res) => {
 }
 
 export const createProduct = async(req, res) => {
-    const {name, image, price} = req.body()
-    console.log(req.body());
+    const {name, image, price} = req.body;
     if(!name || !image || !price){
         return res.status(400).json({ success: false, message: 'All fields are required'})
     }
@@ -42,8 +40,8 @@ export const createProduct = async(req, res) => {
 }
 
 export const updateProductData = async(req, res) => {
-    const id = req.params
-    const {name, price, image} = req.body()
+    const { id } = req.params
+    const {name, price, image} = req.body
     try {
         const updatedProduct = await sql`update products set name = ${name}, price = ${price}, image = ${image} where id=${id} returning *`
         if(updatedProduct.length === 0){
@@ -57,7 +55,7 @@ export const updateProductData = async(req, res) => {
 }
 
 export const deleteProduct = async(req, res) => {
-    const id = req.params
+    const { id } = req.params
     try {
         const deletedProduct = await sql`Delete from products where id=${id} returning *`
         if(deletedProduct.length === 0){

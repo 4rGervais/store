@@ -37,7 +37,8 @@ async function initDB(){
     }
 }
 
-app.get("/",productRoutes)
+app.use("/", productRoutes);
+
 
 initDB().then(()=>{
     app.listen(PORT, () => {
