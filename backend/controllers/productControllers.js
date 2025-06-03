@@ -3,7 +3,6 @@ import { sql } from "../config/db.js"
 export const getAllProducts = async(req, res) => {
     try {
         const products = await sql`SELECT * FROM products order by created_at desc`;
-        console.log(products);
         res.status(200).json({ success: true, data: products})
     } catch (error) {
         res.status(500).json({ success: false, Message: error.message})
@@ -14,6 +13,7 @@ export const getProduct = async(req, res) => {
     const { id } = req.params
             try {
         const product = await sql`Select * from products where id=${id}`
+        console.log(`Select * from products where id=${id}`);
         res.status(200).json({ success: true, data: product})
     } catch (error) {
         console.log("Internal server error");
