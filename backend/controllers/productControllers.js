@@ -22,16 +22,16 @@ export const getProduct = async(req, res) => {
 }
 
 export const createProduct = async(req, res) => {
-    const {name, image, price} = req.body;
+    const {name, image, price, description, stock_quantity} = req.body;
     if(!name || !image || !price){
-        return res.status(400).json({ success: false, message: 'All fields are required'})
+        return res.status(400).json({ success: false, message: 'Name, Image and price are all required'})
     }
     try {
         const newProduct = await sql`
-            INSERT into products (name, price, image)
-            values (${name},${price},${image}) returning *
+            INSERT into products (name, price, image, description, stock_quantity)
+            values (${name},${price},${image}, ${description}, ${stock_quantity}) returning *
         `;
-        console.log('New product inserted'+newProduct);
+        console.log('New product inserted' + newProduct);
         res.status(201).json({ success: true, data: newProduct})
     } catch (error) {
         console.log('Error while adding a product: ' + error.message);
@@ -41,15 +41,15 @@ export const createProduct = async(req, res) => {
 
 export const updateProductData = async(req, res) => {
     const { id } = req.params
-    const {name, price, image} = req.body
+    const {name, price, image, description, stock_quantity} = req.body
     try {
-        const updatedProduct = await sql`update products set name = ${name}, price = ${price}, image = ${image} where id=${id} returning *`
+        const updatedProduct = await sql`update products set name = ${name}, price = ${price}, image = ${image}, description = ${description}, stock_quantity = ${stock_quantity} where id=${id} returning *`
         if(updatedProduct.length === 0){
             return res.status(404).json({success: true, message: "Product not found"})
         }
         res.status(200).json({ success: true, data: updatedProduct[0]})
     } catch (error) {
-        console.log("Errr while updating a product. ", error.message);
+        console.log("Error while updating a product. ", error.message);
         res.status(500).json({success: false, message: "Internal server error"})
     }
 }
