@@ -1,10 +1,12 @@
 import React from 'react'
 import Navbar from './navbar'
+import GetProducts from './pages/getProducts'
 
 function App() {
   return (
     <div>
-      < Navbar/>
+      < GetProducts/>
+      {/* < Navbar/> */}
     </div>
   )
 }
